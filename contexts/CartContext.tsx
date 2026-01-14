@@ -37,17 +37,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return [];
   });
   
-  // Track if we've completed the initial load to avoid saving back to localStorage on mount
-  const isInitialMount = useRef(true);
+  // Track if cart has been initialized - starts false to match SSR, becomes true after hydration
+  const [isLoaded, setIsLoaded] = useState(false);
   
-  // Always return true for isLoaded since we use lazy initialization
-  const isLoaded = typeof window !== "undefined";
+  // Track whether we should skip saving to localStorage (true on first render)
+  const shouldSkipSave = useRef(true);
+  
+  // Mark as loaded after hydration (runs once on mount to signal completion of client-side initialization)
+  // This is an exception to the set-state-in-effect rule: we're not deriving state or syncing with external systems,
+  // but rather tracking component lifecycle for SSR hydration compatibility
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsLoaded(true);
+  }, []);
 
   // Save cart to localStorage whenever items change (skip on initial mount)
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (isInitialMount.current) {
-        isInitialMount.current = false;
+      if (shouldSkipSave.current) {
+        shouldSkipSave.current = false;
         return;
       }
       
