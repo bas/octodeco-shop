@@ -113,7 +113,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         clearCart,
         itemCount,
         subtotal,
-        isLoaded: true, // Always true since we load synchronously during initialization
+        isLoaded: true, // Always true since cart is loaded immediately on client mount
       }}
     >
       {children}
