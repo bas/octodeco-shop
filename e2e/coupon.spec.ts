@@ -123,8 +123,8 @@ test.describe('Discount Coupon Code Feature', () => {
     await page.goto('/checkout');
     
     // Initial subtotal should be around $35.94 (6 items total)
-    // Without coupon, shipping threshold is $25 but subtotal exceeds it
-    await expect(page.getByText('Calculated at next step')).toBeVisible();
+    // Since subtotal exceeds the $25 threshold, shipping should already be free
+    await expect(page.getByText('Free', { exact: true })).toBeVisible();
     
     // Apply 20% coupon (20% off $35.94 = $7.19, final: $28.75)
     await page.getByPlaceholder('Enter coupon code').fill('SAVE20');
