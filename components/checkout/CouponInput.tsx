@@ -42,13 +42,9 @@ export default function CouponInput() {
 
   const handleInputChange = (value: string) => {
     setCouponCode(value);
-    // Clear errors when user starts typing
-    if (error) {
-      setError("");
-    }
-    if (success) {
-      setSuccess("");
-    }
+    // Clear messages when user starts typing
+    setError("");
+    setSuccess("");
   };
 
   return (

@@ -39,7 +39,7 @@ export function validateCoupon(code: string): Coupon | null {
   }
   
   const coupon = VALID_COUPONS.find(
-    (c) => c.code.toUpperCase() === normalizedCode
+    (c) => c.code === normalizedCode
   );
   
   return coupon || null;

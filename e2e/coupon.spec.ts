@@ -29,7 +29,7 @@ test.describe('Discount Coupon Code Feature', () => {
     // Check discount appears in order summary
     await expect(page.getByText('Discount (10%)')).toBeVisible();
     
-    // Check that discount amount is visible (10% of $4.99 = $0.50)
+    // Check that discount amount is visible (10% of $4.99 rounds to $0.50)
     await expect(page.getByText('-$0.50')).toBeVisible();
     
     // Check that total is updated
@@ -123,7 +123,7 @@ test.describe('Discount Coupon Code Feature', () => {
     await page.goto('/checkout');
     
     // Initial subtotal should be around $35.94 (6 items total)
-    // Without coupon, shipping should not be free (threshold is originally $50)
+    // Without coupon, shipping threshold is $25 but subtotal exceeds it
     await expect(page.getByText('Calculated at next step')).toBeVisible();
     
     // Apply 20% coupon (20% off $35.94 = $7.19, final: $28.75)
