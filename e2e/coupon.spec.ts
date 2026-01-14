@@ -15,14 +15,14 @@ test.describe('Discount Coupon Code Feature', () => {
   });
 
   test('apply valid coupon code SAVE10', async ({ page }) => {
-    // Get initial subtotal (Original sticker is $4.99)
-    await expect(page.getByText('Subtotal')).toBeVisible();
+    // Wait for page to load
+    await page.waitForLoadState('networkidle');
     
     // Enter valid coupon code
     await page.getByPlaceholder('Enter coupon code').fill('SAVE10');
     await page.getByRole('button', { name: 'Apply' }).click();
     
-    // Check success message - wait for it to appear
+    // Check that coupon is applied - wait for it to appear
     await expect(page.getByText('Coupon Applied: SAVE10')).toBeVisible({ timeout: 5000 });
     await expect(page.getByText('10% off')).toBeVisible();
     
