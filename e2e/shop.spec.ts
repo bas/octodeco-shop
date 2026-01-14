@@ -66,8 +66,8 @@ test.describe('Octodeco Shop', () => {
     // Check cart contents - use dialog container to avoid ambiguity
     const cartDialog = page.getByRole('dialog', { name: 'Shopping cart' });
     await expect(cartDialog.getByRole('heading', { name: 'Surftocat' })).toBeVisible();
-    // Verify quantity is 2
-    await expect(cartDialog.getByText('2', { exact: true })).toBeVisible();
+    // Verify correct quantity by checking the item count badge in cart header shows "2 items"
+    await expect(cartDialog.getByText('2 items')).toBeVisible();
     
     // Check checkout button is enabled
     await expect(cartDialog.getByRole('button', { name: 'Proceed to Checkout' })).toBeEnabled();
