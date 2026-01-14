@@ -1,9 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from "react";
-import { Product, CartItem } from "@/types";
+import { Product, CartItem, Coupon } from "@/types";
+import { validateCoupon, calculateDiscount, FREE_SHIPPING_THRESHOLD } from "@/lib/coupons";
 
 const CART_STORAGE_KEY = "octodeco-cart";
+const COUPON_STORAGE_KEY = "octodeco-coupon";
 
 interface CartContextType {
   items: CartItem[];
@@ -14,6 +16,12 @@ interface CartContextType {
   itemCount: number;
   subtotal: number;
   isLoaded: boolean;
+  appliedCoupon: Coupon | null;
+  applyCoupon: (code: string) => { success: boolean; message: string; coupon?: Coupon };
+  removeCoupon: () => void;
+  discount: number;
+  total: number;
+  qualifiesForFreeShipping: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -37,11 +45,31 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return [];
   });
   
+  // Load applied coupon from localStorage
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedCoupon = localStorage.getItem(COUPON_STORAGE_KEY);
+        if (savedCoupon) {
+          const parsedCoupon = JSON.parse(savedCoupon);
+          // Validate the loaded coupon to ensure it's a valid coupon code
+          if (parsedCoupon && parsedCoupon.code) {
+            return validateCoupon(parsedCoupon.code);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load coupon from localStorage:", error);
+      }
+    }
+    return null;
+  });
+  
   // Track if cart has been initialized - starts false to match SSR, becomes true after hydration
   const [isLoaded, setIsLoaded] = useState(false);
   
   // Track whether we should skip saving to localStorage (true on first render)
   const shouldSkipSave = useRef(true);
+  const shouldSkipCouponSave = useRef(true);
   
   // Mark as loaded after hydration (runs once on mount to signal completion of client-side initialization)
   // This is an exception to the set-state-in-effect rule: we're not deriving state or syncing with external systems,
@@ -66,6 +94,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
     }
   }, [items]);
+
+  // Save coupon to localStorage whenever it changes (skip on initial mount)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (shouldSkipCouponSave.current) {
+        shouldSkipCouponSave.current = false;
+        return;
+      }
+      
+      try {
+        if (appliedCoupon) {
+          localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(appliedCoupon));
+        } else {
+          localStorage.removeItem(COUPON_STORAGE_KEY);
+        }
+      } catch (error) {
+        console.error("Failed to save coupon to localStorage:", error);
+      }
+    }
+  }, [appliedCoupon]);
 
   const addItem = useCallback((product: Product, quantity: number = 1) => {
     setItems((currentItems) => {
@@ -106,6 +154,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => {
     setItems([]);
+    setAppliedCoupon(null);
+  }, []);
+
+  const applyCoupon = useCallback((code: string) => {
+    const coupon = validateCoupon(code);
+    
+    if (!coupon) {
+      return {
+        success: false,
+        message: "Invalid coupon code",
+      };
+    }
+    
+    setAppliedCoupon(coupon);
+    return {
+      success: true,
+      message: `Coupon applied! You saved ${coupon.discountPercent}%`,
+      coupon,
+    };
+  }, []);
+
+  const removeCoupon = useCallback(() => {
+    setAppliedCoupon(null);
   }, []);
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
@@ -114,6 +185,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     (total, item) => total + item.product.price * item.quantity,
     0
   );
+
+  // Calculate discount if a coupon is applied
+  const discount = appliedCoupon ? calculateDiscount(subtotal, appliedCoupon) : 0;
+  
+  // Calculate final total after discount
+  const total = subtotal - discount;
+  
+  // Check if order qualifies for free shipping (based on post-discount total)
+  const qualifiesForFreeShipping = total >= FREE_SHIPPING_THRESHOLD;
 
   return (
     <CartContext.Provider
@@ -126,6 +206,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         itemCount,
         subtotal,
         isLoaded,
+        appliedCoupon,
+        applyCoupon,
+        removeCoupon,
+        discount,
+        total,
+        qualifiesForFreeShipping,
       }}
     >
       {children}

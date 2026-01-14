@@ -37,3 +37,9 @@ export interface CheckoutFormData {
   shipping: ShippingDetails;
   billing: BillingDetails;
 }
+
+export interface Coupon {
+  code: string;
+  discountPercent: number;
+  description?: string;
+}
