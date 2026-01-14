@@ -118,7 +118,7 @@ test.describe('Discount Coupon Code Feature', () => {
     
     // Add to cart
     await page.getByRole('button', { name: 'Add to Cart' }).click();
-    await page.waitForTimeout(500); // Wait for cart update
+    await page.waitForLoadState('networkidle'); // Wait for cart update to complete
     
     await page.goto('/checkout');
     
