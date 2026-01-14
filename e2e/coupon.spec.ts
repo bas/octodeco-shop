@@ -135,7 +135,7 @@ test.describe('Discount Coupon Code Feature', () => {
   });
 
   test('free shipping does not apply when discounted total is below $25', async ({ page }) => {
-    // Single item ($5.99) with 10% off = $5.39, which is below $25
+    // Single item ($4.99) with 10% off = $4.49, which is below $25
     await page.getByPlaceholder('Enter coupon code').fill('SAVE10');
     await page.getByRole('button', { name: 'Apply' }).click();
     
