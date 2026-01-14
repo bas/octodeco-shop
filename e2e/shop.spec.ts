@@ -66,7 +66,8 @@ test.describe('Octodeco Shop', () => {
     // Check cart contents - use dialog container to avoid ambiguity
     const cartDialog = page.getByRole('dialog', { name: 'Shopping cart' });
     await expect(cartDialog.getByRole('heading', { name: 'Surftocat' })).toBeVisible();
-    await expect(cartDialog.getByText('$11.98')).toBeVisible(); // 2 x $5.99
+    // Check the subtotal text specifically (use exact: false to match the text context)
+    await expect(cartDialog.getByText('Subtotal').locator('..').getByText('$11.98')).toBeVisible(); // 2 x $5.99
     
     // Check checkout button is enabled
     await expect(cartDialog.getByRole('button', { name: 'Proceed to Checkout' })).toBeEnabled();
@@ -131,8 +132,8 @@ test.describe('Octodeco Shop', () => {
     await page.getByRole('link', { name: 'Stickers', exact: true }).first().click();
     await expect(page).toHaveURL('/products');
     
-    // Click Home link
-    await page.getByRole('link', { name: 'Home' }).click();
+    // Click Home link (use first() to target navbar link, not footer)
+    await page.getByRole('link', { name: 'Home' }).first().click();
     await expect(page).toHaveURL('/');
     
     // Click logo
