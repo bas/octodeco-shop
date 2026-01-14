@@ -128,8 +128,8 @@ test.describe('Octodeco Shop', () => {
   test('navigation works correctly', async ({ page }) => {
     await page.goto('/');
     
-    // Click Stickers link in navigation (use exact match and first to target navbar link)
-    await page.getByRole('link', { name: 'Stickers', exact: true }).first().click();
+    // Click Stickers link in navigation (use exact match to target navbar link)
+    await page.getByRole('link', { name: 'Stickers', exact: true }).click();
     await expect(page).toHaveURL('/products');
     
     // Click Home link (use first() to target navbar link, not footer)
