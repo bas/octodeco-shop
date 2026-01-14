@@ -1,0 +1,125 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e11]:
+      - button "Open issues overlay" [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: "0"
+          - generic [ref=e15]: "1"
+        - generic [ref=e16]: Issue
+      - button "Collapse issues badge" [ref=e17]:
+        - img [ref=e18]
+  - navigation [ref=e20]:
+    - generic [ref=e22]:
+      - link "Octodeco" [ref=e23] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e24]: Octodeco
+      - generic [ref=e25]:
+        - link "Home" [ref=e26] [cursor=pointer]:
+          - /url: /
+        - link "Stickers" [ref=e27] [cursor=pointer]:
+          - /url: /products
+      - button "Open cart" [ref=e29]:
+        - img [ref=e30]
+        - generic [ref=e34]: "1"
+  - dialog "Shopping cart" [ref=e35]:
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - img [ref=e39]
+          - heading "Your Cart" [level=2] [ref=e42]
+          - generic [ref=e43]: 1 item
+        - button "Close cart" [ref=e44]:
+          - img [ref=e45]
+      - generic [ref=e50]:
+        - img "Original Octocat" [ref=e52]
+        - generic [ref=e53]:
+          - heading "Original Octocat" [level=3] [ref=e54]
+          - paragraph [ref=e55]: $4.99
+          - generic [ref=e56]:
+            - button "Decrease quantity" [ref=e57]:
+              - img [ref=e58]
+            - generic [ref=e59]: "1"
+            - button "Increase quantity" [ref=e60]:
+              - img [ref=e61]
+        - generic [ref=e62]:
+          - generic [ref=e63]: $4.99
+          - button "Remove Original Octocat from cart" [ref=e64]:
+            - img [ref=e65]
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]: Subtotal
+          - generic [ref=e72]: $4.99
+        - paragraph [ref=e73]: Shipping calculated at checkout
+        - generic [ref=e74]:
+          - generic [ref=e75]: Total
+          - generic [ref=e76]: $4.99
+        - generic [ref=e77]:
+          - link "Proceed to Checkout" [ref=e78] [cursor=pointer]:
+            - /url: /checkout
+            - button "Proceed to Checkout" [ref=e79]
+          - button "Clear Cart" [ref=e80]
+  - main [ref=e81]:
+    - main [ref=e82]:
+      - generic [ref=e83]:
+        - link "Back to products" [ref=e84] [cursor=pointer]:
+          - /url: /products
+          - img [ref=e85]
+          - generic [ref=e87]: Back to products
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - img "Surftocat" [ref=e90]
+            - generic [ref=e91]: Featured
+          - generic [ref=e92]:
+            - generic [ref=e93]:
+              - heading "Surftocat" [level=1] [ref=e94]
+              - paragraph [ref=e95]: $5.99
+            - paragraph [ref=e96]: Catch the wave with this rad surfing Octocat sticker.
+            - generic [ref=e97]:
+              - generic [ref=e98]: Quantity
+              - generic [ref=e99]:
+                - button "Decrease quantity" [disabled] [ref=e100]:
+                  - img [ref=e101]
+                - spinbutton [ref=e102]: "1"
+                - button "Increase quantity" [ref=e103]:
+                  - img [ref=e104]
+            - button "Add to Cart" [ref=e105]:
+              - img [ref=e106]
+              - text: Add to Cart
+            - generic [ref=e110]:
+              - heading "Features" [level=3] [ref=e111]
+              - list [ref=e112]:
+                - listitem [ref=e113]:
+                  - img [ref=e114]
+                  - text: Premium vinyl material
+                - listitem [ref=e116]:
+                  - img [ref=e117]
+                  - text: Weather-resistant & waterproof
+                - listitem [ref=e119]:
+                  - img [ref=e120]
+                  - text: Officially licensed design
+                - listitem [ref=e122]:
+                  - img [ref=e123]
+                  - text: Easy peel-and-stick application
+  - contentinfo [ref=e125]:
+    - generic [ref=e126]:
+      - generic [ref=e127]:
+        - generic [ref=e128]:
+          - link "Octodeco" [ref=e129] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e130]: Octodeco
+          - paragraph [ref=e131]: Premium licensed Octocat stickers
+        - navigation [ref=e132]:
+          - link "Home" [ref=e133] [cursor=pointer]:
+            - /url: /
+          - link "Products" [ref=e134] [cursor=pointer]:
+            - /url: /products
+          - link "Checkout" [ref=e135] [cursor=pointer]:
+            - /url: /checkout
+      - paragraph [ref=e137]: © 2026 Octodeco. All rights reserved. Octocat is a trademark of GitHub, Inc.
+  - alert [ref=e138]
+```
