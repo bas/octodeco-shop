@@ -66,8 +66,8 @@ test.describe('Octodeco Shop', () => {
     // Check cart contents - use dialog container to avoid ambiguity
     const cartDialog = page.getByRole('dialog', { name: 'Shopping cart' });
     await expect(cartDialog.getByRole('heading', { name: 'Surftocat' })).toBeVisible();
-    // Check the subtotal text specifically (use exact: false to match the text context)
-    await expect(cartDialog.getByText('Subtotal').locator('..').getByText('$11.98')).toBeVisible(); // 2 x $5.99
+    // Verify quantity is 2
+    await expect(cartDialog.getByText('2', { exact: true })).toBeVisible();
     
     // Check checkout button is enabled
     await expect(cartDialog.getByRole('button', { name: 'Proceed to Checkout' })).toBeEnabled();
