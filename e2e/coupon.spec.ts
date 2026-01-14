@@ -189,7 +189,7 @@ test.describe('Discount Coupon Code Feature', () => {
     await expect(page.getByPlaceholder('Enter coupon code')).toBeVisible();
   });
 
-  test('discount calculation is accurate for multiple coupons', async ({ page }) => {
+  test('discount calculation is accurate for WELCOME25 coupon', async ({ page }) => {
     // Add more items
     await page.goto('/products/dinotocat');
     await page.getByRole('button', { name: 'Add to Cart' }).click();

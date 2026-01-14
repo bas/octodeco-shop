@@ -10,12 +10,10 @@ export default function CouponInput() {
   const { appliedCoupon, applyCoupon, removeCoupon } = useCart();
   const [couponCode, setCouponCode] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handleApplyCoupon = () => {
     // Clear previous messages
     setError("");
-    setSuccess("");
 
     // Validate empty input
     if (!couponCode.trim()) {
@@ -26,7 +24,6 @@ export default function CouponInput() {
     const result = applyCoupon(couponCode);
 
     if (result.success) {
-      setSuccess(result.message);
       setCouponCode("");
     } else {
       setError(result.message);
@@ -36,15 +33,13 @@ export default function CouponInput() {
   const handleRemoveCoupon = () => {
     removeCoupon();
     setError("");
-    setSuccess("");
     setCouponCode("");
   };
 
   const handleInputChange = (value: string) => {
     setCouponCode(value);
-    // Clear messages when user starts typing
+    // Clear error when user starts typing
     setError("");
-    setSuccess("");
   };
 
   return (
@@ -94,11 +89,6 @@ export default function CouponInput() {
           {error && (
             <p className="text-sm text-red-500" role="alert">
               {error}
-            </p>
-          )}
-          {success && (
-            <p className="text-sm text-green-600" role="status">
-              {success}
             </p>
           )}
         </>

@@ -34,10 +34,6 @@ export const VALID_COUPONS: Coupon[] = [
 export function validateCoupon(code: string): Coupon | null {
   const normalizedCode = code.trim().toUpperCase();
   
-  if (!normalizedCode) {
-    return null;
-  }
-  
   const coupon = VALID_COUPONS.find(
     (c) => c.code === normalizedCode
   );
