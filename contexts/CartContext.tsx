@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from "react";
 import { Product, CartItem } from "@/types";
 
 const CART_STORAGE_KEY = "octodeco-cart";
@@ -19,37 +19,53 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load cart from localStorage on initial mount (client-side only)
-  useEffect(() => {
+  // Load cart from localStorage using lazy initialization (client-side only)
+  const [items, setItems] = useState<CartItem[]>(() => {
     if (typeof window !== "undefined") {
       try {
         const savedCart = localStorage.getItem(CART_STORAGE_KEY);
         if (savedCart) {
           const parsedCart = JSON.parse(savedCart);
           if (Array.isArray(parsedCart)) {
-            setItems(parsedCart);
+            return parsedCart;
           }
         }
       } catch (error) {
         console.error("Failed to load cart from localStorage:", error);
       }
-      setIsLoaded(true);
     }
+    return [];
+  });
+  
+  // Track if cart has been initialized - starts false to match SSR, becomes true after hydration
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  // Track whether we should skip saving to localStorage (true on first render)
+  const shouldSkipSave = useRef(true);
+  
+  // Mark as loaded after hydration (runs once on mount to signal completion of client-side initialization)
+  // This is an exception to the set-state-in-effect rule: we're not deriving state or syncing with external systems,
+  // but rather tracking component lifecycle for SSR hydration compatibility
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsLoaded(true);
   }, []);
 
-  // Save cart to localStorage whenever items change
+  // Save cart to localStorage whenever items change (skip on initial mount)
   useEffect(() => {
-    if (typeof window !== "undefined" && isLoaded) {
+    if (typeof window !== "undefined") {
+      if (shouldSkipSave.current) {
+        shouldSkipSave.current = false;
+        return;
+      }
+      
       try {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
       } catch (error) {
         console.error("Failed to save cart to localStorage:", error);
       }
     }
-  }, [items, isLoaded]);
+  }, [items]);
 
   const addItem = useCallback((product: Product, quantity: number = 1) => {
     setItems((currentItems) => {
