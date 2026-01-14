@@ -63,12 +63,13 @@ test.describe('Octodeco Shop', () => {
     // Open cart drawer
     await page.getByRole('button', { name: 'Open cart' }).click();
     
-    // Check cart contents
-    await expect(page.getByRole('dialog').getByRole('heading', { name: 'Surftocat' })).toBeVisible();
-    await expect(page.getByRole('dialog').getByText('$11.98')).toBeVisible(); // 2 x $5.99
+    // Check cart contents - use dialog container to avoid ambiguity
+    const cartDialog = page.getByRole('dialog', { name: 'Shopping cart' });
+    await expect(cartDialog.getByRole('heading', { name: 'Surftocat' })).toBeVisible();
+    await expect(cartDialog.getByText('$11.98')).toBeVisible(); // 2 x $5.99
     
     // Check checkout button is enabled
-    await expect(page.getByRole('dialog').getByRole('button', { name: 'Proceed to Checkout' })).toBeEnabled();
+    await expect(cartDialog.getByRole('button', { name: 'Proceed to Checkout' })).toBeEnabled();
   });
 
   test('checkout form validates required fields', async ({ page }) => {
@@ -111,22 +112,23 @@ test.describe('Octodeco Shop', () => {
     page.on('dialog', dialog => dialog.accept());
     await page.getByRole('button', { name: 'Place Order' }).click();
     
-    // Cart should be empty after order
-    await expect(page.getByRole('heading', { name: 'Your cart is empty' })).toBeVisible();
+    // Cart should be empty after order - target the main checkout page heading (h2, not the h3 in cart drawer)
+    await expect(page.getByRole('heading', { name: 'Your cart is empty', level: 2 })).toBeVisible();
   });
 
   test('empty cart shows message on checkout', async ({ page }) => {
     await page.goto('/checkout');
     
-    await expect(page.getByRole('heading', { name: /Your cart is empty/i })).toBeVisible();
+    // Target the h2 heading on the checkout page specifically (not the h3 in cart drawer)
+    await expect(page.getByRole('heading', { name: /Your cart is empty/i, level: 2 })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Browse Products' })).toBeVisible();
   });
 
   test('navigation works correctly', async ({ page }) => {
     await page.goto('/');
     
-    // Click Stickers link
-    await page.getByRole('link', { name: 'Stickers' }).click();
+    // Click Stickers link in navigation (use exact match and first to target navbar link)
+    await page.getByRole('link', { name: 'Stickers', exact: true }).first().click();
     await expect(page).toHaveURL('/products');
     
     // Click Home link
