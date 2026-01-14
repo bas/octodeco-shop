@@ -51,7 +51,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       try {
         const savedCoupon = localStorage.getItem(COUPON_STORAGE_KEY);
         if (savedCoupon) {
-          return JSON.parse(savedCoupon);
+          const parsedCoupon = JSON.parse(savedCoupon);
+          // Validate the loaded coupon to ensure it's a valid coupon code
+          if (parsedCoupon && parsedCoupon.code) {
+            return validateCoupon(parsedCoupon.code);
+          }
         }
       } catch (error) {
         console.error("Failed to load coupon from localStorage:", error);

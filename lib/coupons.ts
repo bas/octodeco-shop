@@ -29,10 +29,15 @@ export const VALID_COUPONS: Coupon[] = [
 /**
  * Validates a coupon code (case-insensitive) and returns the coupon if valid
  * @param code - The coupon code to validate (will be trimmed and uppercased)
-
+ * @returns The valid coupon or null if invalid
+ */
+export function validateCoupon(code: string): Coupon | null {
+  const normalizedCode = code.trim().toUpperCase();
+  
   const coupon = VALID_COUPONS.find(
     (c) => c.code === normalizedCode
   );
+  
   return coupon || null;
 }
 
