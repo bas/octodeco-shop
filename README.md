@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OctoDeco Shop 🐙
+
+A demo e-commerce webshop for Octocat stickers, built with Next.js 16 and Tailwind CSS v4.
+
+## Features
+
+- 🛍️ **Product Catalog** — Browse 20 unique Octocat sticker designs
+- 🛒 **Shopping Cart** — Add items, adjust quantities, persistent localStorage
+- 📦 **Checkout Flow** — Shipping & billing forms with Zod validation
+- 📱 **Responsive Design** — Works on desktop and mobile
+- ⚡ **Server Components** — Fast initial page loads with Next.js App Router
+
+## Tech Stack
+
+- **Framework:** [Next.js 16](https://nextjs.org) (App Router)
+- **Styling:** [Tailwind CSS v4](https://tailwindcss.com)
+- **Icons:** [Lucide React](https://lucide.dev)
+- **Validation:** [Zod](https://zod.dev)
+- **Testing:** [Playwright](https://playwright.dev)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the shop.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+app/
+├── page.tsx              # Home page with hero & featured products
+├── products/
+│   ├── page.tsx          # All products grid
+│   └── [slug]/page.tsx   # Individual product detail
+└── checkout/page.tsx     # Checkout form
 
-## Learn More
+components/
+├── ui/                   # Reusable UI primitives (Button, Input, Badge)
+├── cart/                 # Cart drawer and cart item components
+└── checkout/             # Checkout form components
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
