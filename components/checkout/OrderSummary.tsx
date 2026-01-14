@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
+import CouponInput from "./CouponInput";
 
 export default function OrderSummary() {
-  const { items, subtotal } = useCart();
+  const { items, subtotal, appliedCoupon, discount, total, qualifiesForFreeShipping } = useCart();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-US", {
@@ -62,16 +63,31 @@ export default function OrderSummary() {
             ))}
           </div>
 
+          {/* Coupon Code Section */}
+          <div className="pt-4 border-t border-foreground/10">
+            <CouponInput />
+          </div>
+
           {/* Totals */}
           <div className="space-y-3 pt-4 border-t border-foreground/10">
             <div className="flex justify-between text-sm">
               <span className="text-foreground/60">Subtotal</span>
               <span className="text-foreground">{formatPrice(subtotal)}</span>
             </div>
+            {appliedCoupon && discount > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-foreground/60">
+                  Discount ({appliedCoupon.discountPercent}%)
+                </span>
+                <span className="text-green-600 font-medium">
+                  -{formatPrice(discount)}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between text-sm">
               <span className="text-foreground/60">Shipping</span>
               <span className="text-foreground">
-                {subtotal >= 50 ? (
+                {qualifiesForFreeShipping ? (
                   <span className="text-green-600 font-medium">Free</span>
                 ) : (
                   "Calculated at next step"
@@ -80,7 +96,7 @@ export default function OrderSummary() {
             </div>
             <div className="flex justify-between text-base font-semibold pt-3 border-t border-foreground/10">
               <span className="text-foreground">Total</span>
-              <span className="text-octodeco-purple">{formatPrice(subtotal)}</span>
+              <span className="text-octodeco-purple">{formatPrice(total)}</span>
             </div>
           </div>
         </>
